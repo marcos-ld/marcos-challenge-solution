@@ -14,14 +14,17 @@ Inclusion of 3 new projects
 
 # Extra NuGet Packages
 
+- Autofac
+  Autofac was used to implement IoC (Inversion of Control)
+  
 - FakeItEasy
+  FakeItEasy was used to ensure the core business methods are being used when performing the main activities; Calc Bits, and Fraud Analysis. And also to better create mock/fake objects.
+
 - Serilog
+  Serilog was used to include logging for better issues tracking.
 
 To better isolate the responsibilities, the core business logic was placed on the Service project.
-On the Domain project, you can find all the interfaces, and the Entities/Model objects for the application.
-
-FakeItEasy was used to ensure the core business methods are being used when performing the main activities; Calc Bits, and Fraud Analysis.
-Serilog was used to include logging for better issues tracking.
+in the Domain project, you can find all the interfaces, and the Entities/Model objects for the application.
 
 As mentioned on the second exercise, receiving a file path is not good, so, I've change the Method to accept a FraudRequest instead.
 By passing the FraudRequest object as a parameter, you can either specify a file extension, or a file name.
