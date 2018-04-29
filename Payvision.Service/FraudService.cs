@@ -95,7 +95,10 @@ namespace Payvision.Service
 
         public string NormalizeEmailAddress(string email)
         {
-            var aux = email.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
+            var aux = email?.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (aux == null || aux.Length <= 1)
+                return email;
 
             var atIndex = aux[0].IndexOf("+", StringComparison.Ordinal);
 
@@ -106,12 +109,16 @@ namespace Payvision.Service
 
         public string NormalizeStateAddress(string state)
         {
-            return state.Replace("il", "illinois").Replace("ca", "california").Replace("ny", "new york");
+            return state?.Replace("il", "illinois")
+                ?.Replace("ca", "california")
+                ?.Replace("ny", "new york");
         }
 
         public string NormalizeStreetAddress(string street)
         {
-            return street.Replace("st.", "street").Replace("rd.", "road");
+            return street
+                ?.Replace("st.", "street")
+                ?.Replace("rd.", "road");
         }
 
         public IList<Order> ReadOrders(string path)
