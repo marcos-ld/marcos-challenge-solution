@@ -15,10 +15,10 @@ Inclusion of 3 new projects
 # Extra NuGet Packages
 
 - Autofac
-  Autofac was used to implement IoC (Inversion of Control)
+Autofac was used to implement IoC (Inversion of Control)
   
 - FakeItEasy
-  FakeItEasy was used to ensure the core business methods are being used when performing the main activities; Calc Bits, and Fraud Analysis. And also to better create mock/fake objects.
+FakeItEasy was used to ensure the core business methods are being used when performing the main activities; Calc Bits, and Fraud Analysis. And also to better create mock/fake objects.
 
 - Serilog
   Serilog was used to include logging for better issues tracking.
@@ -29,11 +29,11 @@ in the Domain project, you can find all the interfaces, and the Entities/Model o
 As mentioned on the second exercise, receiving a file path is not good, so, I've change the Method to accept a FraudRequest instead.
 By passing the FraudRequest object as a parameter, you can either specify a file extension, or a file name.
 
-- File Extension (For multiple processing)
-  By using the file extension, the method Check(FraudRequest request) is going to look for all files inside the provided Directory based on the file informed file extension pattern.
+- File Extension (Multiple processing)
+  By using the file extension, the method Check(FraudRequest request) is going to look for all files within the provided Directory, based on provided search pattern. i.e. *.txt
    
-- File Name (For single processing)
-  By using the file name, the method Check(FraudRequest request) is going to look for a file with the provided name, inside the provided Directory
+- File Name (Single processing)
+  By using the file name, the method Check(FraudRequest request) is going to look for a file with the provided file name, within the provided Directory
    
 # Extra Unit Tests
 
