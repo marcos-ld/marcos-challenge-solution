@@ -29,14 +29,14 @@ namespace Payvision.Service
         public FraudRequestValidation IsValidRequest(FraudRequest request)
         {
             if (string.IsNullOrEmpty(request.Directory) || !Directory.Exists(request.Directory))
-                return new FraudRequestValidation { Success = false, Message = "Invalid Directory" };
+                return new FraudRequestValidation(false, "Invalid Directory");
 
             if (  (string.IsNullOrEmpty(request.SearchPattern) && string.IsNullOrEmpty(request.FileName))
                 || (!string.IsNullOrEmpty(request.SearchPattern) && !request.SearchPattern.EndsWith(".txt"))
                 || (!string.IsNullOrEmpty(request.FileName) && !request.FileName.EndsWith(".txt")))
-                return new FraudRequestValidation { Success = false, Message = "Invalid Search Pattern Extension, and/or File. *.txt Allowed only" };
+                return new FraudRequestValidation(false,"Invalid Search Pattern Extension, and/or File. *.txt Allowed only");
 
-            return new FraudRequestValidation { Success = true };
+            return new FraudRequestValidation(true);
         }
 
         public void EnsureFieldIsNumeric(string field, string errorMessage)
@@ -136,19 +136,17 @@ namespace Payvision.Service
 
                     EnsureOrderFieldsAreValid(items[0], items[1], items[2], items[3], items[4], items[5]);
 
-                    var order = new Order
-                    {
-                        OrderId = int.Parse(items[0]),
-                        DealId = int.Parse(items[1]),
-                        Email = items[2].ToLower(),
-                        Street = items[3].ToLower(),
-                        City = items[4].ToLower(),
-                        State = items[5].ToLower(),
-                        ZipCode = items[6],
-                        CreditCard = items[7]
-                    };
-
-                    orders.Add(order);
+                    orders.Add(new Order
+                    (
+                        orderId: int.Parse(items[0]),
+                        dealId: int.Parse(items[1]),
+                        email: items[2].ToLower(),
+                        street: items[3].ToLower(),
+                        city: items[4].ToLower(),
+                        state: items[5].ToLower(),
+                        zipCode: items[6],
+                        creditCard: items[7]
+                    ));
                 }
                 catch(Exception ex)
                 {

@@ -8,20 +8,39 @@ namespace Payvision.Domain.Entities
 {
     public class Order
     {
-        public int OrderId { get; set; }
+        public int OrderId { get; }
 
-        public int DealId { get; set; }
+        public int DealId { get; }
 
-        public string Email { get; set; }
+        public string Email { get; }
 
-        public string Street { get; set; }
+        public string Street { get; }
 
-        public string City { get; set; }
+        public string City { get; }
 
-        public string State { get; set; }
+        public string State { get; }
 
-        public string ZipCode { get; set; }
+        public string ZipCode { get; }
 
-        public string CreditCard { get; set; }
+        public string CreditCard { get; }
+
+        public Order(int orderId, int dealId, string email, string street, string city, string state, string zipCode, string creditCard)
+        {
+            OrderId = orderId;
+            DealId = dealId;
+            Email = email;
+            Street = street;
+            City = city;
+            State = state;
+            ZipCode = zipCode;
+            CreditCard = creditCard;
+        }
+
+        public void Normalize(Interfaces.IFraudService fraudService)
+        {
+            fraudService.NormalizeEmailAddress(Email);
+            fraudService.NormalizeStreetAddress(City);
+            fraudService.NormalizeStateAddress(State);
+        }
     }
 }

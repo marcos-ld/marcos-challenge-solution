@@ -147,30 +147,27 @@ namespace Payvision.Test.Service
         [TestMethod]
         public void LookForCreditCardFraudByAddress_ShouldFail_IfThereAreFrauds()
         {
-            //(order.DealId == orderToComp are.DealId
-            //           && order.State == orderToCompare.State
-            //           && order.ZipCode == orderToCompare.ZipCode
-            //           && order.Street == orderToCompare.Street
-            //           && order.City == orderToCompare.City
-            //           && order.CreditCard != orderToCompare.CreditCard);
+            var order1 = new Order(
+                orderId: 1,
+                dealId: 12,
+                email: string.Empty,
+                city: "city1",
+                state: "TX",
+                zipCode: "2020",
+                street: "street 123",
+                creditCard: "2023213422445421"
+            );
 
-            var order1 = new Order()
-            {
-                DealId = 12,
-                State = "TX",
-                ZipCode = "2020",
-                Street = "street 123",
-                CreditCard = "2023213422445421"
-            };
-
-            var order2 = new Order()
-            {
-                DealId = 12,
-                State = "TX",
-                ZipCode = "2020",
-                Street = "street 123",
-                CreditCard = "2023213422445422"
-            };
+            var order2 = new Order(
+                orderId: 2,
+                dealId: 12,
+                email: string.Empty,
+                city: "city1",
+                state: "TX",
+                zipCode: "2020",
+                street: "street 123",
+                creditCard: "2023213422445422"
+            );
 
             var result = FraudService.LookForCreditCardFraudByAddress(order1, order2);
 
@@ -180,23 +177,27 @@ namespace Payvision.Test.Service
         [TestMethod]
         public void LookForCreditCardFraudByAddress_ShouldFSucceed_IfThereAreNoFrauds()
         {
-            var order1 = new Order()
-            {
-                DealId = 13,
-                State = "UT",
-                ZipCode = "1232",
-                Street = "street AA",
-                CreditCard = "2443213422445421"
-            };
+            var order1 = new Order(
+                orderId: 1,
+                dealId: 13,
+                email: string.Empty,
+                city: "ab",
+                street: "street AA",
+                state: "UT",
+                zipCode: "1232",
+                creditCard: "2443213422445421"
+            );
 
-            var order2 = new Order()
-            {
-                DealId = 13,
-                State = "UT",
-                ZipCode = "1232",
-                Street = "street AA",
-                CreditCard = "2443213422445421"
-            };
+            var order2 = new Order(
+                orderId: 2,
+                dealId: 13,
+                email: string.Empty,
+                city: "ab",
+                state: "UT",
+                zipCode: "1232",
+                street: "street AA",
+                creditCard: "2443213422445421"
+            );
 
             var result = FraudService.LookForCreditCardFraudByAddress(order1, order2);
 
@@ -206,19 +207,27 @@ namespace Payvision.Test.Service
         [TestMethod]
         public void LookForCreditCardFraudByEmail_ShouldFail_IfThereAreFrauds()
         {
-            var order1 = new Order()
-            {
-                DealId = 28,
-                Email = "marcosld@gmail.com",
-                CreditCard = "2443213422445421"
-            };
+            var order1 = new Order(
+                orderId: 2,
+                dealId: 28,
+                email: "marcosld@gmail.com",
+                street: null,
+                city: null,
+                state: null,
+                zipCode: null,
+                creditCard: "2443213422445421"
+            );
 
-            var order2 = new Order()
-            {
-                DealId = 28,
-                Email = "marcosld@gmail.com",
-                CreditCard = "2443213422447721"
-            };
+            var order2 = new Order(
+                orderId: 3,
+                dealId: 28,
+                email: "marcosld@gmail.com",
+                street: null,
+                city: null,
+                state: null,
+                zipCode: null,
+                creditCard: "2443213422447721"
+            );
 
             var result = FraudService.LookForCreditCardFraudByEmail(order1, order2);
 
@@ -228,19 +237,27 @@ namespace Payvision.Test.Service
         [TestMethod]
         public void LookForCreditCardFraudByEmail_ShouldSucceed_IfThereAreNoFrauds()
         {
-            var order1 = new Order()
-            {
-                DealId = 67,
-                Email = "marcosld@gmail.com",
-                CreditCard = "2443213422447721"
-            };
+            var order1 = new Order(
+                orderId: 1,
+                dealId: 67,
+                email: "marcosld@gmail.com",
+                street: null,
+                city: null,
+                state: null,
+                zipCode: null,
+                creditCard: "2443213422447721"
+            );
 
-            var order2 = new Order()
-            {
-                DealId = 67,
-                Email = "marcosld@gmail.com",
-                CreditCard = "2443213422447721"
-            };
+            var order2 = new Order(
+                orderId: 2,
+                dealId: 67,
+                email: "marcosld@gmail.com",
+                street: null,
+                city: null,
+                state: null,
+                zipCode: null,
+                creditCard: "2443213422447721"
+            );
 
             var result = FraudService.LookForCreditCardFraudByEmail(order1, order2);
 

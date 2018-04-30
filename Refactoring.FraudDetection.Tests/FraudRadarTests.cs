@@ -84,16 +84,13 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection.Tests
             var bitService = A.Fake<IFraudService>();
 
             //Arrange
-            A.CallTo(() => bitService.IsValidRequest(A<FraudRequest>._)).Returns(new FraudRequestValidation
-            {
-                Success = true
-            });
+            A.CallTo(() => bitService.IsValidRequest(A<FraudRequest>._)).Returns(new FraudRequestValidation(true));
             A.CallTo(() => bitService.ReadOrders(A<string>._)).Returns(new List<Order>
             {
-                new Order { OrderId = 1, DealId = 1, Email = "bugs@bunny.com", Street = "123 Sesame St.", City = "New York", State = "NY", ZipCode = "10011", CreditCard = "12345689010" },
-                new Order { OrderId = 2, DealId = 1, Email = "bugs@bunny.com", Street = "123 Sesame St.", City = "New York", State = "NY", ZipCode = "10011", CreditCard = "12345689011" },
-                new Order { OrderId = 3, DealId = 2, Email = "roger@rabbit.com", Street = "1234 Not Sesame St.", City = "Colorado", State = "NY", ZipCode = "10012", CreditCard = "12345689012" },
-                new Order { OrderId = 4, DealId = 2, Email = "roger@rabbit.com", Street = "1234 Not Sesame St.", City = "Colorado", State = "NY", ZipCode = "10012", CreditCard = "12345689014" }
+                new Order ( orderId: 1, dealId: 1, email: "bugs@bunny.com", street: "123 Sesame St.", city: "New York", state: "NY", zipCode: "10011", creditCard: "12345689010" ),
+                new Order ( orderId: 2, dealId: 1, email: "bugs@bunny.com", street: "123 Sesame St.", city: "New York", state: "NY", zipCode: "10011", creditCard: "12345689011" ),
+                new Order ( orderId: 3, dealId: 2, email: "roger@rabbit.com", street: "1234 Not Sesame St.", city: "Colorado", state: "NY", zipCode: "10012", creditCard: "12345689012" ),
+                new Order ( orderId: 4, dealId: 2, email : "roger@rabbit.com", street : "1234 Not Sesame St.", city : "Colorado", state : "NY", zipCode : "10012", creditCard : "12345689014" )
             });
 
             var fraudRadar = new FraudRadar(bitService, A.Fake<ILoggerService>());
@@ -125,16 +122,13 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection.Tests
             var bitService = A.Fake<IFraudService>();
 
             //Arrange
-            A.CallTo(() => bitService.IsValidRequest(A<FraudRequest>._)).Returns(new FraudRequestValidation
-            {
-                Success = true
-            });
+            A.CallTo(() => bitService.IsValidRequest(A<FraudRequest>._)).Returns(new FraudRequestValidation(true));
             A.CallTo(() => bitService.ReadOrders(A<string>._)).Returns(new List<Order>
             {
-                new Order { OrderId = 1, DealId = 1, Email = "bugs@bunny.com", Street = "123 Sesame St.", City = "New York", State = "NY", ZipCode = "10011", CreditCard = "12345689010" },
-                new Order { OrderId = 2, DealId = 1, Email = "bugs@bunny.com", Street = "123 Sesame St.", City = "New York", State = "NY", ZipCode = "10011", CreditCard = "12345689011" },
-                new Order { OrderId = 3, DealId = 2, Email = "roger@rabbit.com", Street = "1234 Not Sesame St.", City = "Colorado", State = "NY", ZipCode = "10012", CreditCard = "12345689012" },
-                new Order { OrderId = 4, DealId = 2, Email = "roger@rabbit.com", Street = "1234 Not Sesame St.", City = "Colorado", State = "NY", ZipCode = "10012", CreditCard = "12345689014" }
+                new Order ( orderId: 1, dealId: 1, email: "bugs@bunny.com", street: "123 Sesame St.", city: "New York", state: "NY", zipCode: "10011", creditCard: "12345689010" ),
+                new Order ( orderId: 2, dealId: 1, email: "bugs@bunny.com", street: "123 Sesame St.", city: "New York", state: "NY", zipCode: "10011", creditCard: "12345689011" ),
+                new Order ( orderId: 3, dealId: 2, email: "roger@rabbit.com", street: "1234 Not Sesame St.", city: "Colorado", state: "NY", zipCode: "10012", creditCard: "12345689012" ),
+                new Order ( orderId: 4, dealId: 2, email: "roger@rabbit.com", street: "1234 Not Sesame St.", city: "Colorado", state: "NY", zipCode: "10012", creditCard: "12345689014" )
             });
 
             var fraudRadar = new FraudRadar(bitService, A.Fake<ILoggerService>());

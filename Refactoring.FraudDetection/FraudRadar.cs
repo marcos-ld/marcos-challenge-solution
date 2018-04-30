@@ -37,10 +37,10 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection
         {
             try
             {
-                var result = new List<FraudResult>();
-
                 // CHECK IF FILE EXISTS AND IF THE EXTESION IS VALID
-                ValidateRequest(request);
+                request.Validate(_fraudService);
+
+                var result = new List<FraudResult>();
 
                 string searchPattern = string.IsNullOrEmpty(request.FileName) ? request.SearchPattern : request.FileName;
 
@@ -66,10 +66,11 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection
                 var orders = _fraudService.ReadOrders(filePath);
 
                 // NORMALIZE
-                NormalizeOrders(orders);
+                foreach (var order in orders)
+                    order.Normalize(_fraudService);
 
                 // CHECK FRAUD
-                return RunAnalysis(orders);
+                return RunAnalysis(orders, filePath);
             }
             catch (Exception ex)
             {
@@ -78,25 +79,7 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection
             }
         }
 
-        public void ValidateRequest(FraudRequest request)
-        {
-            var requestValidation = _fraudService.IsValidRequest(request);
-
-            if (!requestValidation.Success)
-                throw new ArgumentException(requestValidation.Message);
-        }
-
-        public void NormalizeOrders(IList<Order> orders)
-        {
-            foreach (var order in orders)
-            {
-                _fraudService.NormalizeEmailAddress(order.Email);
-                _fraudService.NormalizeStreetAddress(order.City);
-                _fraudService.NormalizeStateAddress(order.State);
-            }
-        }
-
-        public IList<FraudResult> RunAnalysis(IList<Order> orders)
+        public IList<FraudResult> RunAnalysis(IList<Order> orders, string file)
         {
             var fraudResults = new List<FraudResult>();
             
@@ -110,7 +93,7 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection
 
                     if (_fraudService.LookForCreditCardFraudByEmail(current, orderToCompare)
                         || _fraudService.LookForCreditCardFraudByAddress(current, orderToCompare))
-                        fraudResults.Add(new FraudResult { IsFraudulent = true, OrderId = orderToCompare.OrderId });
+                        fraudResults.Add(new FraudResult(file, orderToCompare.OrderId, true));
                 }
             }
 

@@ -11,5 +11,13 @@ namespace Payvision.Domain.Model
         public string Directory;
         public string SearchPattern;
         public string FileName;
+
+        public void Validate(Interfaces.IFraudService fraudService)
+        {
+            var requestValidation = fraudService.IsValidRequest(this);
+
+            if (!requestValidation.Success)
+                throw new ArgumentException(requestValidation.Message);
+        }
     }
 }

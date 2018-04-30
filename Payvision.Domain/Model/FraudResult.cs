@@ -8,10 +8,23 @@ namespace Payvision.Domain.Model
 {
     public class FraudResult
     {
-        public string File { get; set; }
+        public string File { get; }
 
-        public int OrderId { get; set; }
+        public int OrderId { get; }
 
-        public bool IsFraudulent { get; set; }
+        public bool IsFraudulent { get; }
+
+        public FraudResult(int orderId, bool isFraudulent)
+        {
+            OrderId = orderId;
+            IsFraudulent = isFraudulent;
+        }
+
+        public FraudResult(string file, int orderId, bool isFraudulent)
+        {
+            File = file;
+            OrderId = orderId;
+            IsFraudulent = isFraudulent;
+        }
     }
 }
