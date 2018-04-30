@@ -56,6 +56,12 @@ By passing the FraudRequest object as a parameter, you can either specify a file
 	- IsValidRequest_ShouldReturnFailedValidation_IfInvalid
 	- IsValidRequest_ShouldSucceedValidation_IfCorrect
 	- EnsureFilePathIsValid_ShouldThrowException_IfInvalid
+	- LookForCreditCardFraudByAddress_ShouldFail_IfThereAreFrauds
+	- LookForCreditCardFraudByAddress_ShouldFSucceed_IfThereAreNoFrauds
+	- LookForCreditCardFraudByEmail_ShouldFail_IfThereAreFrauds
+	- LookForCreditCardFraudByEmail_ShouldSucceed_IfThereAreNoFrauds
+
+### Class OrderServiceTest	
 	- EnsureFilePathIsValid_ShouldTNothrowException_IfValid
 	- NormalizeEmailAddress_ShouldNormalizeEmailAsExpected
 	- NormalizeStateAddress_ShouldNormalizeStateAsExpected
@@ -66,9 +72,7 @@ By passing the FraudRequest object as a parameter, you can either specify a file
 	- EnsureFIeldIsFilled_MustThrowException_IfInvalid
 	- EnsureOrderHasAllMandatoryFields_ShouldThrowException_IfFieldNumberIsCorrect
 	- EnsureOrderFieldsAreValid_ShouldThrowExceptionIfOneOfTheFieldsAreMissing
-	- LookForCreditCardFraudByAddress_ShouldFail_IfThereAreFrauds
-	- LookForCreditCardFraudByAddress_ShouldFSucceed_IfThereAreNoFrauds
-	- LookForCreditCardFraudByEmail_ShouldFail_IfThereAreFrauds
-	- LookForCreditCardFraudByEmail_ShouldSucceed_IfThereAreNoFrauds		
 	
 During the refactoring and the development, I've tried to follow the Clean Code concept, so the methods, and variable's names should speak by themselves, without having to comment everything.
+
+Additionally, commit with changes were made, also proofing the code can be changed and maintained.
