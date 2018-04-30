@@ -15,17 +15,17 @@ namespace Payvision.Test.Service
     [TestClass]
     public class FraudServiceTest
     {
-        private readonly IFraudService FraudService;
+        private readonly IFraudService _fraudService;
 
         public FraudServiceTest()
         {
-            FraudService = new Payvision.Service.FraudService(new Payvision.Service.LoggerService());
+            _fraudService = new Payvision.Service.FraudService(new Payvision.Service.LoggerService());
         }
 
         [TestMethod]
         public void IsValidRequest_ShouldReturnFailedDirectoryValidation_IfInvalid()
         {
-            var result = FraudService.IsValidRequest(new FraudRequest());
+            var result = _fraudService.IsValidRequest(new FraudRequest());
 
             Assert.IsFalse(result.Success, "The result is not the expected");
             Assert.AreEqual(result.Message, "Invalid Directory");
@@ -35,7 +35,7 @@ namespace Payvision.Test.Service
         [DeploymentItem("./Files/OneLineFile.txt", "Files")]
         public void IsValidRequest_ShouldReturnFailedFileExtensionValidation_IfInvalid()
         {
-            var result = FraudService.IsValidRequest(new FraudRequest
+            var result = _fraudService.IsValidRequest(new FraudRequest
             {
                 Directory = Path.Combine(Environment.CurrentDirectory, "Files")
             });
@@ -48,7 +48,7 @@ namespace Payvision.Test.Service
         [DeploymentItem("./Files/OneLineFile.txt", "Files")]
         public void IsValidRequest_ShouldSucceedValidation_IfCorrect()
         {
-            var result = FraudService.IsValidRequest(new FraudRequest
+            var result = _fraudService.IsValidRequest(new FraudRequest
             {
                 Directory = Path.Combine(Environment.CurrentDirectory, "Files"),
                 FileName = "OneLineFile.txt"
@@ -63,85 +63,14 @@ namespace Payvision.Test.Service
         [ExpectedException(typeof(ArgumentException))]
         public void EnsureFilePathIsValid_ShouldThrowException_IfInvalid()
         {
-            FraudService.EnsureFilePathIsValid(Path.Combine(Environment.CurrentDirectory, "Files", "OneLineFile123.txt"));
+            _fraudService.EnsureFilePathIsValid(Path.Combine(Environment.CurrentDirectory, "Files", "OneLineFile123.txt"));
         }
 
         [TestMethod]
         [DeploymentItem("./Files/OneLineFile.txt", "Files")]
         public void EnsureFilePathIsValid_ShouldTNothrowException_IfValid()
         {
-            FraudService.EnsureFilePathIsValid(Path.Combine(Environment.CurrentDirectory, "Files", "OneLineFile.txt"));
-        }
-
-        [TestMethod]
-        public void NormalizeEmailAddress_ShouldNormalizeEmailAsExpected()
-        {
-            var result = FraudService.NormalizeEmailAddress("marcos.vinicius.deus@gmail.com");
-
-            Assert.AreEqual(result, "marcosviniciusdeus@gmail.com");
-        }
-
-        [TestMethod]
-        public void NormalizeStateAddress_ShouldNormalizeStateAsExpected()
-        {
-            var result = FraudService.NormalizeStateAddress("il");
-
-            Assert.AreEqual(result, "illinois");
-        }
-
-        [TestMethod]
-        public void NormalizeStateAddress_ShouldNotNormalizeState_IfNotIncludedInKnownStates()
-        {
-            var result = FraudService.NormalizeStateAddress("tx");
-
-            Assert.AreEqual(result, "tx");
-        }
-
-        [TestMethod]
-        public void NormalizeStreetAddress_ShouldNormalizeStreetAsExcpected()
-        {
-            var result = FraudService.NormalizeStreetAddress("st. teding van jean");
-
-            Assert.AreEqual(result, "street teding van jean");
-        }
-
-        [TestMethod]
-        [DeploymentItem("./Files/FourLines_MoreThanOneFraudulent.txt", "Files")]
-        public void ReadOrders_ShouldReturnCorrespondingNUmberOfConvertedObjects()
-        {
-            var result = FraudService.ReadOrders(Path.Combine(Environment.CurrentDirectory, "Files", "FourLines_MoreThanOneFraudulent.txt"));
-
-            Assert.AreEqual(result.Count, 4);
-            Assert.AreEqual(result[0].OrderId, 1);
-            Assert.AreEqual(result[3].OrderId, 4);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void EnsureFieldIsNumeric_ShouldThrownException_IfFieldInvalid()
-        {
-            FraudService.EnsureFieldIsNumeric("1asdasd313", string.Empty);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void EnsureFIeldIsFilled_MustThrowException_IfInvalid()
-        {
-            FraudService.EnsureFIeldIsFilled(null, string.Empty);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void EnsureOrderHasAllMandatoryFields_ShouldThrowException_IfFieldNumberIsCorrect()
-        {
-            FraudService.EnsureOrderHasAllMandatoryFields(new string[] { "123", "marcosld@gmail.com", null, null });
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void EnsureOrderFieldsAreValid_ShouldThrowExceptionIfOneOfTheFieldsAreMissing()
-        {
-            FraudService.EnsureOrderFieldsAreValid("1233", "1", null, "street A", "city", "state 1");
+            _fraudService.EnsureFilePathIsValid(Path.Combine(Environment.CurrentDirectory, "Files", "OneLineFile.txt"));
         }
 
         [TestMethod]
@@ -169,7 +98,7 @@ namespace Payvision.Test.Service
                 creditCard: "2023213422445422"
             );
 
-            var result = FraudService.LookForCreditCardFraudByAddress(order1, order2);
+            var result = _fraudService.LookForCreditCardFraudByAddress(order1, order2);
 
             Assert.IsTrue(result);
         }
@@ -199,7 +128,7 @@ namespace Payvision.Test.Service
                 creditCard: "2443213422445421"
             );
 
-            var result = FraudService.LookForCreditCardFraudByAddress(order1, order2);
+            var result = _fraudService.LookForCreditCardFraudByAddress(order1, order2);
 
             Assert.IsFalse(result);
         }
@@ -229,7 +158,7 @@ namespace Payvision.Test.Service
                 creditCard: "2443213422447721"
             );
 
-            var result = FraudService.LookForCreditCardFraudByEmail(order1, order2);
+            var result = _fraudService.LookForCreditCardFraudByEmail(order1, order2);
 
             Assert.IsTrue(result);
         }
@@ -259,7 +188,7 @@ namespace Payvision.Test.Service
                 creditCard: "2443213422447721"
             );
 
-            var result = FraudService.LookForCreditCardFraudByEmail(order1, order2);
+            var result = _fraudService.LookForCreditCardFraudByEmail(order1, order2);
 
             Assert.IsFalse(result);
         }

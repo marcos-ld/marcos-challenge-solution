@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Service\BitServiceTest.cs" />
+    <Compile Include="Service\OrderServiceTest.cs" />
     <Compile Include="Service\FraudServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

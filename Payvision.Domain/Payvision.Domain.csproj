@@ -44,6 +44,7 @@
     <Compile Include="Interfaces\IBitService.cs" />
     <Compile Include="Interfaces\IFraudService.cs" />
     <Compile Include="Interfaces\ILoggerService.cs" />
+    <Compile Include="Interfaces\IOrderService.cs" />
     <Compile Include="Model\FraudRequest.cs" />
     <Compile Include="Model\FraudRequestValidation.cs" />
     <Compile Include="Model\FraudResult.cs" />

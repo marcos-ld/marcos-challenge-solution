@@ -81,11 +81,12 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection.Tests
         [DeploymentItem("./Files/FourLines_MoreThanOneFraudulent.txt", "Files")]
         public void CheckFraud_MustHaveReadOrdersFourtimes()
         {
-            var bitService = A.Fake<IFraudService>();
+            var fraudService = A.Fake<IFraudService>();
+            var orderService = A.Fake<IOrderService>();
 
             //Arrange
-            A.CallTo(() => bitService.IsValidRequest(A<FraudRequest>._)).Returns(new FraudRequestValidation(true));
-            A.CallTo(() => bitService.ReadOrders(A<string>._)).Returns(new List<Order>
+            A.CallTo(() => fraudService.IsValidRequest(A<FraudRequest>._)).Returns(new FraudRequestValidation(true));
+            A.CallTo(() => orderService.ReadOrders(A<string>._)).Returns(new List<Order>
             {
                 new Order ( orderId: 1, dealId: 1, email: "bugs@bunny.com", street: "123 Sesame St.", city: "New York", state: "NY", zipCode: "10011", creditCard: "12345689010" ),
                 new Order ( orderId: 2, dealId: 1, email: "bugs@bunny.com", street: "123 Sesame St.", city: "New York", state: "NY", zipCode: "10011", creditCard: "12345689011" ),
@@ -93,7 +94,7 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection.Tests
                 new Order ( orderId: 4, dealId: 2, email : "roger@rabbit.com", street : "1234 Not Sesame St.", city : "Colorado", state : "NY", zipCode : "10012", creditCard : "12345689014" )
             });
 
-            var fraudRadar = new FraudRadar(bitService, A.Fake<ILoggerService>());
+            var fraudRadar = new FraudRadar(fraudService, orderService, A.Fake<ILoggerService>());
 
             //Act
             fraudRadar.Check(new FraudRequest
@@ -102,28 +103,29 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection.Tests
                 SearchPattern = "*.txt"
             }).ToList();
 
-            A.CallTo(() => bitService.IsValidRequest(A<FraudRequest>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => fraudService.IsValidRequest(A<FraudRequest>._)).MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => bitService.EnsureFilePathIsValid(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(4));
-            A.CallTo(() => bitService.ReadOrders(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(4));
+            A.CallTo(() => fraudService.EnsureFilePathIsValid(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(4));
+            A.CallTo(() => orderService.ReadOrders(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(4));
 
-            A.CallTo(() => bitService.NormalizeEmailAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(16));
-            A.CallTo(() => bitService.NormalizeStateAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(16));
-            A.CallTo(() => bitService.NormalizeStreetAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(16));
+            A.CallTo(() => orderService.NormalizeEmailAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(16));
+            A.CallTo(() => orderService.NormalizeStateAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(16));
+            A.CallTo(() => orderService.NormalizeStreetAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(16));
 
-            A.CallTo(() => bitService.LookForCreditCardFraudByEmail(A<Order>._, A<Order>._)).MustHaveHappened(Repeated.AtLeast.Times(4));
-            A.CallTo(() => bitService.LookForCreditCardFraudByAddress(A<Order>._, A<Order>._)).MustHaveHappened(Repeated.AtLeast.Times(4));
+            A.CallTo(() => fraudService.LookForCreditCardFraudByEmail(A<Order>._, A<Order>._)).MustHaveHappened(Repeated.AtLeast.Times(4));
+            A.CallTo(() => fraudService.LookForCreditCardFraudByAddress(A<Order>._, A<Order>._)).MustHaveHappened(Repeated.AtLeast.Times(4));
         }
 
         [TestMethod]
         [DeploymentItem("./Files/FourLines_MoreThanOneFraudulent.txt", "Files")]
         public void Count_ValidInput_MandatoryMethodsMustHaveBeenUsed()
         {
-            var bitService = A.Fake<IFraudService>();
+            var fraudService = A.Fake<IFraudService>();
+            var orderService = A.Fake<IOrderService>();
 
             //Arrange
-            A.CallTo(() => bitService.IsValidRequest(A<FraudRequest>._)).Returns(new FraudRequestValidation(true));
-            A.CallTo(() => bitService.ReadOrders(A<string>._)).Returns(new List<Order>
+            A.CallTo(() => fraudService.IsValidRequest(A<FraudRequest>._)).Returns(new FraudRequestValidation(true));
+            A.CallTo(() => orderService.ReadOrders(A<string>._)).Returns(new List<Order>
             {
                 new Order ( orderId: 1, dealId: 1, email: "bugs@bunny.com", street: "123 Sesame St.", city: "New York", state: "NY", zipCode: "10011", creditCard: "12345689010" ),
                 new Order ( orderId: 2, dealId: 1, email: "bugs@bunny.com", street: "123 Sesame St.", city: "New York", state: "NY", zipCode: "10011", creditCard: "12345689011" ),
@@ -131,7 +133,7 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection.Tests
                 new Order ( orderId: 4, dealId: 2, email: "roger@rabbit.com", street: "1234 Not Sesame St.", city: "Colorado", state: "NY", zipCode: "10012", creditCard: "12345689014" )
             });
 
-            var fraudRadar = new FraudRadar(bitService, A.Fake<ILoggerService>());
+            var fraudRadar = new FraudRadar(fraudService, orderService, A.Fake<ILoggerService>());
 
             //Act
             fraudRadar.Check(new FraudRequest
@@ -141,15 +143,15 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection.Tests
             }).ToList();
 
             //Assert
-            A.CallTo(() => bitService.IsValidRequest(A<FraudRequest>._)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => bitService.ReadOrders(A<string>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => fraudService.IsValidRequest(A<FraudRequest>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => orderService.ReadOrders(A<string>._)).MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => bitService.NormalizeEmailAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(4));
-            A.CallTo(() => bitService.NormalizeStateAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(4));
-            A.CallTo(() => bitService.NormalizeStreetAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(4));
+            A.CallTo(() => orderService.NormalizeEmailAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(4));
+            A.CallTo(() => orderService.NormalizeStateAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(4));
+            A.CallTo(() => orderService.NormalizeStreetAddress(A<string>._)).MustHaveHappened(Repeated.Exactly.Times(4));
 
-            A.CallTo(() => bitService.LookForCreditCardFraudByEmail(A<Order>._, A<Order>._)).MustHaveHappened(Repeated.AtLeast.Once);
-            A.CallTo(() => bitService.LookForCreditCardFraudByAddress(A<Order>._, A<Order>._)).MustHaveHappened(Repeated.AtLeast.Once);
+            A.CallTo(() => fraudService.LookForCreditCardFraudByEmail(A<Order>._, A<Order>._)).MustHaveHappened(Repeated.AtLeast.Once);
+            A.CallTo(() => fraudService.LookForCreditCardFraudByAddress(A<Order>._, A<Order>._)).MustHaveHappened(Repeated.AtLeast.Once);
         }
 
         private static List<FraudResult> ExecuteTest(string file)

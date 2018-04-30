@@ -36,11 +36,11 @@ namespace Payvision.Domain.Entities
             CreditCard = creditCard;
         }
 
-        public void Normalize(Interfaces.IFraudService fraudService)
+        public void Normalize(Interfaces.IOrderService orderService)
         {
-            fraudService.NormalizeEmailAddress(Email);
-            fraudService.NormalizeStreetAddress(City);
-            fraudService.NormalizeStateAddress(State);
+            orderService.NormalizeEmailAddress(Email);
+            orderService.NormalizeStreetAddress(City);
+            orderService.NormalizeStateAddress(State);
         }
     }
 }

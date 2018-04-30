@@ -62,6 +62,7 @@
     <Compile Include="FraudService.cs" />
     <Compile Include="BitService.cs" />
     <Compile Include="LoggerService.cs" />
+    <Compile Include="OrderService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

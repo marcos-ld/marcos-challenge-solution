@@ -19,18 +19,21 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection
     public class FraudRadar
     {
         private readonly IFraudService _fraudService;
+        private readonly IOrderService _orderService;
         private readonly ILoggerService _loggerService;
 
         public FraudRadar()
         {
             _fraudService = Common.Ioc.ApplicationContainer.Resolve<IFraudService>();
             _loggerService = Common.Ioc.ApplicationContainer.Resolve<ILoggerService>();
+            _orderService = Common.Ioc.ApplicationContainer.Resolve<IOrderService>();
         }
 
-        public FraudRadar(IFraudService fraudService, ILoggerService loggerService)
+        public FraudRadar(IFraudService fraudService, IOrderService orderService, ILoggerService loggerService)
         {
             _fraudService = fraudService;
             _loggerService = loggerService;
+            _orderService = orderService;
         }
 
         public IEnumerable<FraudResult> Check(FraudRequest request)
@@ -63,11 +66,11 @@ namespace Payvision.CodeChallenge.Refactoring.FraudDetection
                 _fraudService.EnsureFilePathIsValid(filePath);
 
                 // READ FRAUD LINES
-                var orders = _fraudService.ReadOrders(filePath);
+                var orders = _orderService.ReadOrders(filePath);
 
                 // NORMALIZE
                 foreach (var order in orders)
-                    order.Normalize(_fraudService);
+                    order.Normalize(_orderService);
 
                 // CHECK FRAUD
                 return RunAnalysis(orders, filePath);
